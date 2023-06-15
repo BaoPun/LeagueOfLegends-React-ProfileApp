@@ -169,7 +169,7 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
             splitUrlArray.current = window.location.href.split('/');
             summoner_api_url.current = 'https://' + splitUrlArray.current[splitUrlArray.current.length-2] + '.api.riotgames.com/lol/summoner/v4/summoners/by-name/' + splitUrlArray.current[splitUrlArray.current.length-1] + '?api_key=' + api_key.current;
             summonerMatchHistoryDetailList.current = [];
-            setSummonerMatchHistoryApiData(undefined);
+            setSummonerMatchHistoryDetailData(undefined);
         }
 
         // If the data already exists, then don't process anything
@@ -243,6 +243,7 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
         if(!isSummonerDataValid || ValidSummonerUrls.current.length === 0 || (summonerApiData && summonerRankApiData !== undefined && isRankDataGenerated)){
             //console.log('Rank data: ' + JSON.stringify(summonerRankApiData) + '\nHas data been processed: ' + isRankDataLoaded.current);
             isRankDataLoaded.current = false;
+            summonerMatchHistoryDetailList.current = [];
             return;
         }
 
@@ -427,7 +428,7 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
         const asyncMatchDataCalls = async () => {
             // Process each match from the list of matches from summonerMatchHistoryApiData
             for(let i = 0; i < summonerMatchHistoryDetailList.current.length; i++){
-                await delay(1); // wait every half of a second before each load
+                //await delay(1); // wait every half of a second before each load
                 await loadMatchData(summonerMatchHistoryDetailList.current[i], i);
             }
         }

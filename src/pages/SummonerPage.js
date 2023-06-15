@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Home from './Home';
 import ApiKey from '../util/ApiKey';
 import RankDisplay from '../components/RankDisplay';
+import MatchHistoryDisplay from '../components/MatchHistoryDisplay';
 
 /**
  * Given the platform, return the region.
@@ -44,7 +45,7 @@ function GetNewUrls(summonerApiData, currentPlatform, api_key){
     ValidSummonerUrls.push('https://' + currentPlatform + '.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/' + summonerApiData['id'] + '/top?count=7&api_key=' + api_key);
 
     // Pass in the summoner match history url
-    ValidSummonerUrls.push('https://' + GetRegion(currentPlatform) + '.api.riotgames.com/lol/match/v5/matches/by-puuid/' + summonerApiData['puuid'] + '/ids?start=0&count=10&api_key=' + api_key);
+    ValidSummonerUrls.push('https://' + GetRegion(currentPlatform) + '.api.riotgames.com/lol/match/v5/matches/by-puuid/' + summonerApiData['puuid'] + '/ids?start=0&count=7&api_key=' + api_key);
 
     // Finally, return the list
     return ValidSummonerUrls;
@@ -162,6 +163,7 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
      */
     useEffect(() => {
         // Initially, the data is NOT loaded.  Also update the splitUrlArray and summoner_api_url variables for each new data
+        // And also reset the match history data
         if(!isSummonerDataLoaded.current){
             setisSummonerDataGenerated(false);
             splitUrlArray.current = window.location.href.split('/');
@@ -172,7 +174,7 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
 
         // If the data already exists, then don't process anything
         if(isSummonerDataGenerated && (summonerApiData || errorData)){
-            //console.log('Final summoner data: ' + JSON.stringify(summonerApiData) + ' vs ' + JSON.stringify(errorData) + ' and status = ' + isSummonerDataGenerated);
+            console.log('Final summoner data: ' + JSON.stringify(summonerApiData) + ' vs ' + JSON.stringify(errorData) + ' and status = ' + isSummonerDataGenerated);
             isSummonerDataLoaded.current = false;    // change this to false for the next summoner input
 
             // Set up the isSummonerDataValid flag.  If errorData has data, then no such summoner exists (mark False).  Otherwise, mark True.
@@ -189,7 +191,8 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
                 setCurrentSummoner(summonerApiData['name']);
 
             // Load up the arrays
-            ValidSummonerUrls.current = GetNewUrls(summonerApiData, splitUrlArray.current[splitUrlArray.current.length-2], api_key.current);
+            if(summonerApiData)
+                ValidSummonerUrls.current = GetNewUrls(summonerApiData, splitUrlArray.current[splitUrlArray.current.length-2], api_key.current);
             return;
         }
 
@@ -221,7 +224,8 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
         };
 
         // Call the data fetch
-        loadSummonerData();
+        const asyncLoadSummonerData = async () => {await loadSummonerData();};
+        asyncLoadSummonerData();
     }, [state, summonerApiData, errorData, isSummonerDataGenerated]);
 
     /**
@@ -268,7 +272,8 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
         };
 
         // Call the data fetch
-        loadSummonerRankData();
+        const asyncLoadSummonerRankData = async () => {await loadSummonerRankData();}
+        asyncLoadSummonerRankData();
     }, [summonerApiData, summonerRankApiData, isRankDataGenerated]);
 
     /**
@@ -316,7 +321,8 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
         };
 
         // Call the data fetch
-        loadSummonerMasteryData();
+        const asyncLoadSummonerMasteryData = async () => {await loadSummonerMasteryData();};
+        asyncLoadSummonerMasteryData();
     }, [summonerApiData, summonerMasteryApiData, isMasteryDataGenerated]);
 
     /**
@@ -363,11 +369,12 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
         };
 
         // Call the data fetch
-        loadMatchHistoryData();
+        const asyncLoadMatchHistoryData = async () => {await loadMatchHistoryData();};
+        asyncLoadMatchHistoryData();
     }, [summonerApiData, summonerMatchHistoryApiData, isMatchHistoryListGenerated]);
 
     /**
-     * More useEffects to process API calls.  For this call, process the list of the 20 most recent matches played.
+     * More useEffects to process API calls.  For this call, process the list of the 7 most recent matches played.
      * However, do not process anything if the summoner data is NOT valid or if summonerMatchHistoryApiData is not fully loaded yet.
      */
     useEffect(() => {
@@ -392,17 +399,17 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
         const loadMatchData = async (matchUrl, idx) => {
             try{
                 console.log('fetching match');
-                await delay(3);
+                if(typeof matchUrl !== 'string')
+                    return;
                 const matchDataResponse = await fetch(matchUrl);
                 
                 if(!matchDataResponse.ok)
                     throw new Error('Error, status is ' + matchDataResponse.status);
 
-                let data = await matchDataResponse.json();
+                const data = await matchDataResponse.json();
+                while(!data);
                 if(data){
                     summonerMatchHistoryDetailList.current[idx] = data['info'];
-                    while(summonerMatchHistoryDetailList.current[idx] !== data['info'])
-                        summonerMatchHistoryDetailList.current[idx] = data['info'];
                     console.log('Finished fetching match!')
                     if(idx === summonerMatchHistoryDetailList.current.length - 1){
                         setSummonerMatchHistoryDetailData(summonerMatchHistoryDetailList.current);
@@ -416,10 +423,16 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
         };
 
         console.log('You are now ready to view the match history data for each match.');
-        // Process each match from the list of matches from summonerMatchHistoryApiData
-        for(let i = 0; i < summonerMatchHistoryDetailList.current.length; i++){
-            loadMatchData(summonerMatchHistoryDetailList.current[i], i);
+        console.log(summonerMatchHistoryDetailList.current);
+        const asyncMatchDataCalls = async () => {
+            // Process each match from the list of matches from summonerMatchHistoryApiData
+            for(let i = 0; i < summonerMatchHistoryDetailList.current.length; i++){
+                await delay(1); // wait every half of a second before each load
+                await loadMatchData(summonerMatchHistoryDetailList.current[i], i);
+            }
         }
+        asyncMatchDataCalls();
+
     }, [summonerApiData, summonerMatchHistoryApiData, summonerMatchHistoryDetailData, isMatchHistoryDataGenerated]);
     
 
@@ -468,16 +481,7 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
                             <div className='summoner-profile-info'>
                                 <p>Match History</p>
                                 <>
-                                    {!summonerMatchHistoryDetailData
-                                        ?  
-                                            <p>Waiting...</p>
-                                        : 
-                                            summonerMatchHistoryDetailData.map(match => (
-                                                <ul key={match['gameId']}>
-                                                    <p>Queue type: {match['gameDuration']}</p>
-                                                </ul>
-                                            ))
-                                    }
+                                    <MatchHistoryDisplay summonerMatchHistoryDetailData={summonerMatchHistoryDetailData} />
                                 </>
                             </div>
                         </div>

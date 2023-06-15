@@ -5,9 +5,64 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #83bba9;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* This contains the entire data */
+.search-container{
+  text-align: center;
+  position: relative;
+  transform: translate(0%, 100%);
+}
+
+/* This contains everything from .search-container + the buttons */
+.summoner-profile-container{
+  position: relative;
+  text-align: center;
+  margin-top: 175px;
+}
+
+/* This contains the content of the top 10 mastery champions */
+.summoner-mastery-container{
+  text-align: center;
+}
+
+/* This is the rank border itself */
+#rank-border-display{
+  width: 18%;
+  height: 18%;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+/* SPINNER */
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 10px solid #f3f3f3; /* Light grey */
+  border-top: 10px solid #383636; /* Blue */
+  border-radius: 50%;
+  animation: spinner 1.5s linear infinite;
+}
+
+.spinner-container {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  height: 350px;
 }

@@ -69,6 +69,7 @@ function getAllMatchUrls(currentPlatform, summonerMatchHistoryApiData, api_key){
 function topChampionsToggle(){
     document.getElementsByClassName('summoner-profile-info')[0].style.display = 'block';
     document.getElementsByClassName('summoner-profile-info')[1].style.display = 'none';
+    document.getElementsByClassName('summoner-profile-info')[2].style.display = 'none';
 }
 
 /**
@@ -77,7 +78,16 @@ function topChampionsToggle(){
 function matchHistoryToggle(){
     document.getElementsByClassName('summoner-profile-info')[0].style.display = 'none';
     document.getElementsByClassName('summoner-profile-info')[1].style.display = 'block';
-    //document.getElementsByClassName('summoner-profile-info')[2].style.display = 'none';
+    document.getElementsByClassName('summoner-profile-info')[2].style.display = 'none';
+}
+
+/**
+ * This is the onClick event for when the user clicks on the 'Live Game' button
+ */
+function liveGameToggle(){
+    document.getElementsByClassName('summoner-profile-info')[0].style.display = 'none';
+    document.getElementsByClassName('summoner-profile-info')[1].style.display = 'none';
+    document.getElementsByClassName('summoner-profile-info')[2].style.display = 'block';
 }
 
 /**
@@ -480,7 +490,7 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
                             }
                             <button type="button" id='profile_champion_mastery' onClick={topChampionsToggle}>View Most Played Champions</button>
                             <button type="button" id='profile_match_history' onClick={matchHistoryToggle}>View Recent Match History</button>
-                            <button type="button" id='profile_live_game'>View Live Game Data</button>
+                            <button type="button" id='profile_live_game' onClick={liveGameToggle}>View Live Game Data</button>
                             <div className='summoner-profile-info'>
                                 <>
                                     <div id='summoner-mastery-container'>
@@ -503,6 +513,9 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
                                 <>
                                     <MatchHistoryDisplay summonerMatchHistoryDetailData={summonerMatchHistoryDetailData} queueData={queueData} />
                                 </>
+                            </div>
+                            <div className='summoner-profile-info' style={{display: 'none'}}>
+                                <p>Live Game Data</p>
                             </div>
                         </div>
                     </>

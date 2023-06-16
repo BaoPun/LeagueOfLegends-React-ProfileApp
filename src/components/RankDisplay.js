@@ -41,14 +41,14 @@ function RankSoloEmblemDisplay({summonerRankApiData}){
             {summonerRankApiData[0]['queueType'] !== 'RANKED_FLEX_SR' 
                 ?
                     <div id='rank-solo-display'>
-                        <img src={path} id='rank-solo-border-display' alt='rank-solo-border'/>
+                        <img src={path} id='rank-solo-border-display' alt='rank-solo-border' />
                         <p>RANK: {summonerRankApiData[0]['tier']} {summonerRankApiData[0]['rank']} with {summonerRankApiData[0]['leaguePoints']} LP</p>
                         <p>{summonerRankApiData[0]['wins']} wins and {summonerRankApiData[0]['losses']} losses</p>
                         <p>S13 RANKED SOLO QUEUE</p>
                     </div>
                 :
                     <div id='rank-flex-display'>
-                        <img src={path} id='rank-flex-border-display' alt='rank-flex-border'/>
+                        <img src={path} id='rank-flex-border-display' alt='rank-flex-border' />
                         <p>RANK: {summonerRankApiData[0]['tier']} {summonerRankApiData[0]['rank']} with {summonerRankApiData[0]['leaguePoints']} LP</p>
                         <p>{summonerRankApiData[0]['wins']} wins and {summonerRankApiData[0]['losses']} losses</p>
                         <p>S13 RANKED FLEX QUEUE</p>

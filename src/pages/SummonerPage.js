@@ -68,10 +68,12 @@ function getAllMatchUrls(currentPlatform, summonerMatchHistoryApiData, api_key){
  * @param {int} second
  * @returns 
  */
+/*
 function delay(second) {
     console.log('Delaying...');
     return new Promise(resolve => setTimeout(resolve, second * 1000));
 }
+*/
 
 /**
  * This is the functional component of the summoner page, which consists of the Home page and the valid detailed information.
@@ -169,7 +171,7 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
             splitUrlArray.current = window.location.href.split('/');
             summoner_api_url.current = 'https://' + splitUrlArray.current[splitUrlArray.current.length-2] + '.api.riotgames.com/lol/summoner/v4/summoners/by-name/' + splitUrlArray.current[splitUrlArray.current.length-1] + '?api_key=' + api_key.current;
             summonerMatchHistoryDetailList.current = [];
-            setSummonerMatchHistoryDetailData(undefined);
+            //setSummonerMatchHistoryDetailData(undefined);
         }
 
         // If the data already exists, then don't process anything
@@ -243,7 +245,6 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
         if(!isSummonerDataValid || ValidSummonerUrls.current.length === 0 || (summonerApiData && summonerRankApiData !== undefined && isRankDataGenerated)){
             //console.log('Rank data: ' + JSON.stringify(summonerRankApiData) + '\nHas data been processed: ' + isRankDataLoaded.current);
             isRankDataLoaded.current = false;
-            summonerMatchHistoryDetailList.current = [];
             return;
         }
 
@@ -391,12 +392,13 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
         }
 
         // If the match history data is already populated, then don't do anything
-        if(isMatchHistoryDataGenerated && summonerMatchHistoryDetailData !== undefined && summonerMatchHistoryDetailData.length === summonerMatchHistoryDetailList.current.length){
+        if(isMatchHistoryDataGenerated && summonerMatchHistoryDetailData && summonerMatchHistoryDetailData.length === summonerMatchHistoryDetailList.current.length && summonerMatchHistoryDetailData.length === 7){
             console.log('Individual match data already exists: \n' + JSON.stringify(summonerMatchHistoryDetailData));
             isMatchHistoryDataLoaded.current = false;
             return;
         }   
 
+        // Begin fetching the data asynchronously; the matchUrl and the index are passed in as arguments since we are passing in a list and referencing the ith match
         const loadMatchData = async (matchUrl, idx) => {
             try{
                 console.log('fetching match');
@@ -479,10 +481,10 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
                                     </div>
                                 </>
                             </div>
-                            <div className='summoner-profile-info'>
+                            <div className='summoner-profile-info' style={{display: 'none'}}>
                                 <p>Match History</p>
                                 <>
-                                    <MatchHistoryDisplay summonerMatchHistoryDetailData={summonerMatchHistoryDetailData} />
+                                    <MatchHistoryDisplay summonerMatchHistoryDetailData={summonerMatchHistoryDetailData} queueData={queueData} />
                                 </>
                             </div>
                         </div>

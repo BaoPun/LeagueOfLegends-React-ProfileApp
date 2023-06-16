@@ -5,7 +5,7 @@
 export default function CreateQueueData(data){
     let result = {};
     for(let queue of data){
-        if(queue['notes'] !== null)
+        if(queue['notes'] === null)
             result[queue['queueId']] = [queue['description'], queue['map']];
     }
     return result;

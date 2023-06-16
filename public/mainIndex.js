@@ -1,8 +1,8 @@
-$(document).ready(function () {
-	// Variables
-	var hasAdjustedTime = false;
+// Variables
+var hasAdjustedTime = false;
 
-    $('.summoner-profile-info')
+//$(document).ready(function () {
+	
 	
     /*
 	// Upon loading the page, hide everything except for the buttons and the most played champions
@@ -78,5 +78,5 @@ $(document).ready(function () {
 	});
 
     */
-});
+//});
 

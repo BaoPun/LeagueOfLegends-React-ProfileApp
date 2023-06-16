@@ -5,7 +5,7 @@
  * @param {object} summonerMatchHistoryDetailData 
  * @returns 
  */
-export default function MatchHistoryDisplay({summonerMatchHistoryDetailData}){
+export default function MatchHistoryDisplay({summonerMatchHistoryDetailData, queueData}){
     return (
         <>
             {!summonerMatchHistoryDetailData
@@ -15,8 +15,8 @@ export default function MatchHistoryDisplay({summonerMatchHistoryDetailData}){
                     summonerMatchHistoryDetailData.map(match => (
                         <div className='match-history-detail'>
                             <ul key={match['gameId']}>
-                                
-                                <p>Queue type: {new Date(match['gameCreation']).toLocaleDateString()}</p>
+                                <p>Game Start Date: {new Date(match['gameCreation']).toLocaleDateString()}</p>
+                                <p>Queue Type: {queueData[match['queueId']][0]}</p>
                             </ul>
                         </div>
                     ))

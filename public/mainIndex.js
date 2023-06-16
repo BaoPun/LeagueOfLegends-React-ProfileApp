@@ -1,5 +1,8 @@
 // Variables
 var hasAdjustedTime = false;
+$('#profile_match_history').on('click', function(){
+    alert('i have been clicked');
+});
 
 //$(document).ready(function () {
 	

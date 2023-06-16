@@ -64,6 +64,23 @@ function getAllMatchUrls(currentPlatform, summonerMatchHistoryApiData, api_key){
 }
 
 /**
+ * This is the onClick event for when the user clicks on the 'View Most Played Champions' button
+ */
+function topChampionsToggle(){
+    document.getElementsByClassName('summoner-profile-info')[0].style.display = 'block';
+    document.getElementsByClassName('summoner-profile-info')[1].style.display = 'none';
+}
+
+/**
+ * This is the onClick event for when the user clicks on the 'View Recent Match History' button
+ */
+function matchHistoryToggle(){
+    document.getElementsByClassName('summoner-profile-info')[0].style.display = 'none';
+    document.getElementsByClassName('summoner-profile-info')[1].style.display = 'block';
+    //document.getElementsByClassName('summoner-profile-info')[2].style.display = 'none';
+}
+
+/**
  * Delays execution by some # of seconds
  * @param {int} second
  * @returns 
@@ -461,8 +478,8 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
                                 :
                                 <h1>Summoner {currentSummoner} from {currentPlatform} does not exist.  WH OMEGALUL?</h1>
                             }
-                            <button type="button" id='profile_champion_mastery'>View Most Played Champions</button>
-                            <button type="button" id='profile_match_history'>View Recent Match History</button>
+                            <button type="button" id='profile_champion_mastery' onClick={topChampionsToggle}>View Most Played Champions</button>
+                            <button type="button" id='profile_match_history' onClick={matchHistoryToggle}>View Recent Match History</button>
                             <button type="button" id='profile_live_game'>View Live Game Data</button>
                             <div className='summoner-profile-info'>
                                 <>

@@ -41,14 +41,14 @@ function RankSoloEmblemDisplay({summonerRankApiData}){
             {summonerRankApiData[0]['queueType'] !== 'RANKED_FLEX_SR' 
                 ?
                     <div id='rank-solo-display'>
-                        <img src={path} id='rank-solo-border-display' alt='rank-solo-border' />
+                        <img src={path} id='rank-solo-border-display' alt='rank-solo-border' width='50%'/>
                         <p>RANK: {summonerRankApiData[0]['tier']} {summonerRankApiData[0]['rank']} with {summonerRankApiData[0]['leaguePoints']} LP</p>
                         <p>{summonerRankApiData[0]['wins']} wins and {summonerRankApiData[0]['losses']} losses</p>
                         <p>S13 RANKED SOLO QUEUE</p>
                     </div>
                 :
                     <div id='rank-flex-display'>
-                        <img src={path} id='rank-flex-border-display' alt='rank-flex-border' />
+                        <img src={path} id='rank-flex-border-display' alt='rank-flex-border' width='50%'/>
                         <p>RANK: {summonerRankApiData[0]['tier']} {summonerRankApiData[0]['rank']} with {summonerRankApiData[0]['leaguePoints']} LP</p>
                         <p>{summonerRankApiData[0]['wins']} wins and {summonerRankApiData[0]['losses']} losses</p>
                         <p>S13 RANKED FLEX QUEUE</p>
@@ -70,14 +70,14 @@ function RankFlexEmblemDisplay({summonerRankApiData}){
             {summonerRankApiData[1]['queueType'] !== 'RANKED_SOLO_5x5' 
                 ?
                     <div id='rank-flex-display'>
-                        <img src={path} id='rank-flex-border-display' alt='rank-flex-border'/>
+                        <img src={path} id='rank-flex-border-display' alt='rank-flex-border'  width='50%' />
                         <p>RANK: {summonerRankApiData[1]['tier']} {summonerRankApiData[1]['rank']} with {summonerRankApiData[1]['leaguePoints']} LP</p>
                         <p>{summonerRankApiData[1]['wins']} wins and {summonerRankApiData[1]['losses']} losses</p>
                         <p>S13 RANKED FLEX QUEUE</p>
                     </div>
                 :
                     <div id='rank-solo-display'>
-                        <img src={path} id='rank-solo-border-display' alt='rank-solo-border'/>
+                        <img src={path} id='rank-solo-border-display' alt='rank-solo-border'  width='50%'/>
                         <p>RANK: {summonerRankApiData[1]['tier']} {summonerRankApiData[1]['rank']} with {summonerRankApiData[1]['leaguePoints']} LP</p>
                         <p>{summonerRankApiData[1]['wins']} wins and {summonerRankApiData[1]['losses']} losses</p>
                         <p>S13 RANKED SOLO QUEUE</p>

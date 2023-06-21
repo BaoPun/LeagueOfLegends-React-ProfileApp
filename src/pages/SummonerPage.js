@@ -177,6 +177,11 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
      */
     const [isMatchHistoryDataGenerated, setIsMatchHistoryDataGenerated] = useState(true);
     var isMatchHistoryDataLoaded = useRef(false);
+
+    /**
+     * Flag to determine if all data processing is complete.  Initially it will be false and upon the first useEffect it will be false
+     */
+    const [isDataFullyGenerated, setIsDataFullyGenerated] = useState(false);
     
     /*
     ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -198,12 +203,13 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
             splitUrlArray.current = window.location.href.split('/');
             summoner_api_url.current = 'https://' + splitUrlArray.current[splitUrlArray.current.length-2] + '.api.riotgames.com/lol/summoner/v4/summoners/by-name/' + splitUrlArray.current[splitUrlArray.current.length-1] + '?api_key=' + api_key.current;
             summonerMatchHistoryDetailList.current = [];
+            setIsDataFullyGenerated(false);
             //setSummonerMatchHistoryDetailData(undefined);
         }
 
         // If the data already exists, then don't process anything
         if(isSummonerDataGenerated && (summonerApiData || errorData)){
-            console.log('Final summoner data: ' + JSON.stringify(summonerApiData) + ' vs ' + JSON.stringify(errorData) + ' and status = ' + isSummonerDataGenerated);
+            //console.log('Final summoner data: ' + JSON.stringify(summonerApiData) + ' vs ' + JSON.stringify(errorData) + ' and status = ' + isSummonerDataGenerated);
             isSummonerDataLoaded.current = false;    // change this to false for the next summoner input
 
             // Set up the isSummonerDataValid flag.  If errorData has data, then no such summoner exists (mark False).  Otherwise, mark True.
@@ -422,6 +428,7 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
         if(isMatchHistoryDataGenerated && summonerMatchHistoryDetailData && summonerMatchHistoryDetailData.length === summonerMatchHistoryDetailList.current.length && summonerMatchHistoryDetailData.length === 7){
             console.log('Individual match data already exists: \n' + JSON.stringify(summonerMatchHistoryDetailData));
             isMatchHistoryDataLoaded.current = false;
+            setIsDataFullyGenerated(true);
             return;
         }   
 
@@ -452,25 +459,33 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
             }
         };
 
-        console.log('You are now ready to view the match history data for each match.');
-        console.log(summonerMatchHistoryDetailList.current);
+        //console.log('You are now ready to view the match history data for each match.');
+        //console.log(summonerMatchHistoryDetailList.current);
         const asyncMatchDataCalls = async () => {
             // Process each match from the list of matches from summonerMatchHistoryApiData
-            for(let i = 0; i < summonerMatchHistoryDetailList.current.length; i++){
-                //await delay(1); // wait every half of a second before each load
+            for(let i = 0; i < summonerMatchHistoryDetailList.current.length; i++)
                 await loadMatchData(summonerMatchHistoryDetailList.current[i], i);
-            }
         }
         asyncMatchDataCalls();
 
     }, [summonerApiData, summonerMatchHistoryApiData, summonerMatchHistoryDetailData, isMatchHistoryDataGenerated]);
+
+    /**
+     * Checks if the data is fully processed.  The final check.
+     */
+    useEffect(() => {
+        if((summonerApiData && summonerRankApiData && summonerMasteryApiData && summonerMatchHistoryApiData && summonerMatchHistoryDetailData && !errorData) || errorData)
+            setIsDataFullyGenerated(true);
+        else 
+            setIsDataFullyGenerated(false);
+    }, [summonerApiData, summonerRankApiData, summonerMasteryApiData, summonerMatchHistoryApiData, summonerMatchHistoryDetailData, errorData]);
     
 
     // If the data hasn't been processed, then display the spinner
     // Otherwise, display the summoner's page
     return (
         <>
-            {(!isSummonerDataGenerated && !errorData) || ((!summonerRankApiData || !summonerMasteryApiData || !summonerMatchHistoryApiData || !summonerMatchHistoryDetailData) && !errorData)
+            {!isDataFullyGenerated
                 ? 
                     <div className="spinner-container">
                         <div className="loading-spinner"></div>
@@ -511,7 +526,7 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
                             <div className='summoner-profile-info' style={{display: 'none'}}>
                                 <p>Match History</p>
                                 <>
-                                    <MatchHistoryDisplay summonerMatchHistoryDetailData={summonerMatchHistoryDetailData} queueData={queueData} />
+                                    <MatchHistoryDisplay summonerMatchHistoryDetailData={summonerMatchHistoryDetailData} platform={currentPlatform} summonerApiData={summonerApiData} errorData={errorData} championData={championData} queueData={queueData} />
                                 </>
                             </div>
                             <div className='summoner-profile-info' style={{display: 'none'}}>

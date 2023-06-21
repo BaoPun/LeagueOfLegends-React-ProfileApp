@@ -66,3 +66,10 @@ code {
   align-items: center;
   height: 350px;
 }
+
+/* Match history */
+.match-detail{
+  display: inline-block;
+  background-color: aqua;
+  text-align: center;
+}

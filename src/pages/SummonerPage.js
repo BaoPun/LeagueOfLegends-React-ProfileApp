@@ -269,8 +269,10 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
      */
     useEffect(() => {
         // Initially, the data is NOT loaded
-        if(!isRankDataLoaded.current)
+        if(!isRankDataLoaded.current){
             setIsRankDataGenerated(false);
+            setIsDataFullyGenerated(false);
+        }
 
         // If summonerRankApiData is fully processed and summonerApiData is valid, then print out the data to the console and escape the useEffect hook.
         // Also escape the useEffect hook if summonerApiData is NOT valid.
@@ -318,8 +320,10 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
     // Parse through the top 10 mastery champions
     useEffect(() => {
         // Initially, the mastery data is NOT loaded
-        if(!isMasteryDataLoaded.current)
+        if(!isMasteryDataLoaded.current){
             setIsMasteryDataGenerated(false);
+            setIsDataFullyGenerated(false);
+        }
 
         // If summonerMasteryApiData is fully processed and summonerApiData is valid, then print out the data to the console and escape the useEffect hook.
         // Also escape the useEffect hook if summonerApiData is NOT valid.
@@ -366,8 +370,10 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
      */
     useEffect(() => {
         // Initially, the data is NOT loaded
-        if(!isMatchHistoryListLoaded.current)
+        if(!isMatchHistoryListLoaded.current){
             setIsMatchHistoryListGenerated(false);
+            setIsDataFullyGenerated(false);
+        }
 
         // If the data is loaded, or if summonerApiData is null (there is an error), then immediately exit the hook
         if(!isSummonerDataValid.current || ValidSummonerUrls.current.length === 0 || (summonerApiData && summonerMatchHistoryApiData !== undefined && isMatchHistoryListGenerated)){
@@ -472,13 +478,14 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
 
     /**
      * Checks if the data is fully processed.  The final check.
-     */
+     *//*
     useEffect(() => {
-        if((summonerApiData && summonerRankApiData && summonerMasteryApiData && summonerMatchHistoryApiData && summonerMatchHistoryDetailData && !errorData) || errorData)
+        if((summonerApiData && summonerRankApiData && summonerMasteryApiData && summonerMatchHistoryApiData && summonerMatchHistoryDetailData && !errorData) || (!summonerApiData && errorData)){
             setIsDataFullyGenerated(true);
+        }
         else 
             setIsDataFullyGenerated(false);
-    }, [summonerApiData, summonerRankApiData, summonerMasteryApiData, summonerMatchHistoryApiData, summonerMatchHistoryDetailData, errorData]);
+    }, [summonerApiData, summonerRankApiData, summonerMasteryApiData, summonerMatchHistoryApiData, summonerMatchHistoryDetailData, errorData]);*/
     
 
     // If the data hasn't been processed, then display the spinner

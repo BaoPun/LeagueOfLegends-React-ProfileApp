@@ -30,7 +30,7 @@ function GetChampionImgOfPlayerFromMatch(match, summonerId, championData){
  * If the game was won, then make the background color blue
  * If the game was lost, then make the background color red
  */
-function changeBackgroundColor(match, summonerId, gameDuration){
+function ChangeBackgroundColor(match, summonerId, gameDuration){
     const idx = GetIndexOfPlayerFromMatch(match, summonerId);
     if(idx === -1)
         return;
@@ -40,15 +40,16 @@ function changeBackgroundColor(match, summonerId, gameDuration){
 /**
  * Simply return a string of the new uri
  */
-function getNewUri(platform, summoner){
+function GetNewUri(platform, summoner){
     return '/profile/' + platform + '/' + summoner;
 }
 
 /**
  * Compute the kda.  If deaths is 0, then return INFINITE
+ * Round to nearest 2 decimal places as well.
  */
-function computeKDA(kills, deaths, assists){
-    return (deaths === 0 ? 'INFINITE' : Math.round((kills + assists)/deaths*100, 2)/100);
+function ComputeKDA(kills, deaths, assists){
+    return (deaths === 0 ? 'INFINITE' : Math.round((kills + assists)/deaths * 100, 2)/ 100);
 }
 
 /**
@@ -57,7 +58,7 @@ function computeKDA(kills, deaths, assists){
  * If the role is another role, then add padding to the beginning of the string to match
  * If the game mode wasn't in summoner's rift, then simply add a padding of 8 spaces
  */
-function getRolePosition(role){
+function GetRolePosition(role){
     if(role === '')
         return '      ';
     else if(role === 'UTILITY')
@@ -115,7 +116,7 @@ export default function MatchHistoryDisplay({summonerMatchHistoryDetailData, pla
                     : 
                         summonerMatchHistoryDetailData.map((match, idx) => (
                             <div className='match-history-detail'>
-                                <ul key={match['gameId']} className="match-detail" style={changeBackgroundColor(match['participants'], summonerApiData['id'], match['gameDuration'])} onClick={() => ExpandOrCollapseMatchDetail(idx)}>
+                                <ul key={match['gameId']} className="match-detail" style={ChangeBackgroundColor(match['participants'], summonerApiData['id'], match['gameDuration'])} onClick={() => ExpandOrCollapseMatchDetail(idx)}>
                                     <img src={GetChampionImgOfPlayerFromMatch(match['participants'], summonerApiData['id'], championData)} alt='plink'/>
                                     <p>Game Start Date: {new Date(match['gameCreation']).toLocaleString()}</p>
                                     <p>Game Duration: {Math.floor(match['gameDuration'] / 60)} minutes, {match['gameDuration'] % 60} seconds</p>
@@ -125,10 +126,13 @@ export default function MatchHistoryDisplay({summonerMatchHistoryDetailData, pla
                                             match['participants'].map( participant => (
                                                 <>
                                                     <p>
-                                                        <a href={getNewUri(platform, participant['summonerName'])}>{participant['summonerName']}</a>
-                                                        {' => '} {getRolePosition(participant['teamPosition'])}
-                                                        <img src={championData[participant['championId']][1]} alt="kekw"/><br/>
-                                                        {participant['kills']} kills / {participant['deaths']} deaths / {participant['assists']} assists {' => '} ({computeKDA(participant['kills'], participant['deaths'], participant['assists'])}) KDA.
+                                                        <a href={GetNewUri(platform, participant['summonerName'])}>{participant['summonerName']}</a>
+                                                        {' => '} 
+                                                        <img src={championData[participant['championId']][1]} alt="kekw"/>
+                                                        {GetRolePosition(participant['teamPosition'])}<br/>
+                                                        {participant['kills']} kills / {participant['deaths']} deaths / {participant['assists']} assists {' => '} ({ComputeKDA(participant['kills'], participant['deaths'], participant['assists'])}) KDA.<br/>
+                                                        Total damage: {participant['totalDamageDealtToChampions']}<br/>
+                                                        Total CS: {participant['totalMinionsKilled'] + participant['neutralMinionsKilled']} ({Math.round((participant['totalMinionsKilled'] + participant['neutralMinionsKilled']) / (Math.floor(match['gameDuration'] / 60)) * 100) / 100} CS/minute)<br/>
                                                     </p>
                                                     <div className='participant-items'>
                                                         <GetItem itemId={participant['item0']} version={version} />
@@ -139,6 +143,7 @@ export default function MatchHistoryDisplay({summonerMatchHistoryDetailData, pla
                                                         <GetItem itemId={participant['item5']} version={version} />
                                                         <GetItem itemId={participant['item6']} version={version} />
                                                     </div>
+                                                    <br/>
                                                 </>
                                             ))
                                         }

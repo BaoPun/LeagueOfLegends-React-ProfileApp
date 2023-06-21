@@ -492,7 +492,7 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
     // Otherwise, display the summoner's page
     return (
         <>
-            {!isDataFullyGenerated
+            {!isDataFullyGenerated && !errorData
                 ? 
                     <div className="spinner-container">
                         <div className="loading-spinner"></div>

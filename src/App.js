@@ -175,9 +175,9 @@ export default function App() {
 	return (
 		<BrowserRouter>
 			<Routes>
-					<Route path='/profile/:platform/:summoner' element={<SummonerPage championData={championData} summonerSpellData={summonerSpellData} queueData={queueData} mapData={mapData} itemData={itemData} version={version}/>}/>
-					<Route path='/' element={<Home />}/>
-					<Route path='*' element={<Page404 />}/>
+				<Route path='/profile/:platform/:summoner' element={<SummonerPage championData={championData} summonerSpellData={summonerSpellData} queueData={queueData} mapData={mapData} itemData={itemData} version={version}/>}/>
+				<Route path='/' element={<Home />}/>
+				<Route path='*' element={<Page404 />}/>
 			</Routes>
 		</BrowserRouter>
 	);

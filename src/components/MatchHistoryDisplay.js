@@ -76,7 +76,7 @@ function getRolePosition(role){
  * @param {object} summonerMatchHistoryDetailData 
  * @returns 
  */
-export default function MatchHistoryDisplay({summonerMatchHistoryDetailData, platform, summonerApiData, errorData, championData, queueData}){
+export default function MatchHistoryDisplay({summonerMatchHistoryDetailData, platform, summonerApiData, errorData, championData, queueData, itemData, version}){
     // 7 false states initially
     let isExpandedMatchDetailView = useRef([false, false, false, false, false, false, false]);
 
@@ -90,6 +90,17 @@ export default function MatchHistoryDisplay({summonerMatchHistoryDetailData, pla
             document.getElementsByClassName('match-expanded-detail')[idx].style.display = 'block';
         else
             document.getElementsByClassName('match-expanded-detail')[idx].style.display = 'none';
+    }
+
+    /**
+     * Get the item given the id and the version.
+     */
+    function GetItem({itemId, version}){
+        if(itemId === 0 || itemId === -1)
+            return;
+        return (
+            <img src={'http://ddragon.leagueoflegends.com/cdn/' + version + '/img/item/' + itemId + '.png'} alt='ICANT_KEKW'/>
+        );
     }
 
     return (
@@ -112,12 +123,23 @@ export default function MatchHistoryDisplay({summonerMatchHistoryDetailData, pla
                                     <div className='match-expanded-detail' style={{display: 'none'}} onClick={(e) => e.stopPropagation()}>
                                         {
                                             match['participants'].map( participant => (
-                                                <p>
-                                                    <a href={getNewUri(platform, participant['summonerName'])}>{participant['summonerName']}</a>
-                                                    {' => '} {getRolePosition(participant['teamPosition'])}
-                                                    <img src={championData[participant['championId']][1]} alt="kekw"/><br/>
-                                                    {participant['kills']} kills / {participant['deaths']} deaths / {participant['assists']} assists {' => '} ({computeKDA(participant['kills'], participant['deaths'], participant['assists'])}) KDA.
-                                                </p>
+                                                <>
+                                                    <p>
+                                                        <a href={getNewUri(platform, participant['summonerName'])}>{participant['summonerName']}</a>
+                                                        {' => '} {getRolePosition(participant['teamPosition'])}
+                                                        <img src={championData[participant['championId']][1]} alt="kekw"/><br/>
+                                                        {participant['kills']} kills / {participant['deaths']} deaths / {participant['assists']} assists {' => '} ({computeKDA(participant['kills'], participant['deaths'], participant['assists'])}) KDA.
+                                                    </p>
+                                                    <div className='participant-items'>
+                                                        <GetItem itemId={participant['item0']} version={version} />
+                                                        <GetItem itemId={participant['item1']} version={version} />
+                                                        <GetItem itemId={participant['item2']} version={version} />
+                                                        <GetItem itemId={participant['item3']} version={version} />
+                                                        <GetItem itemId={participant['item4']} version={version} />
+                                                        <GetItem itemId={participant['item5']} version={version} />
+                                                        <GetItem itemId={participant['item6']} version={version} />
+                                                    </div>
+                                                </>
                                             ))
                                         }
                                     </div>

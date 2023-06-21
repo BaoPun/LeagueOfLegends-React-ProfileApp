@@ -112,7 +112,7 @@ function delay(second) {
  * @param {object} itemData 
  * @returns                             a loading spinner or a rendered detail of the summoner page
  */
-export default function SummonerPage({ championData, summonerSpellData, queueData, mapData, itemData }){
+export default function SummonerPage({ championData, summonerSpellData, queueData, mapData, itemData, version }){
     // Get the state arguments that were passed to this page using useLocation
     // Its mapping will NOT be used at all in this component, but it's necessary for the summonerData useEffect hook to trigger, since each form input changes the state.
     const state  = useLocation();
@@ -526,7 +526,7 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
                             <div className='summoner-profile-info' style={{display: 'none'}}>
                                 <p>Match History</p>
                                 <>
-                                    <MatchHistoryDisplay summonerMatchHistoryDetailData={summonerMatchHistoryDetailData} platform={currentPlatform} summonerApiData={summonerApiData} errorData={errorData} championData={championData} queueData={queueData} />
+                                    <MatchHistoryDisplay summonerMatchHistoryDetailData={summonerMatchHistoryDetailData} platform={currentPlatform} summonerApiData={summonerApiData} errorData={errorData} championData={championData} queueData={queueData} itemData={itemData} version={version} />
                                 </>
                             </div>
                             <div className='summoner-profile-info' style={{display: 'none'}}>

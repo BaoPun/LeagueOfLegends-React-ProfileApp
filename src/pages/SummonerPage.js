@@ -432,7 +432,7 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
 
         // If the match history data is already populated, then don't do anything
         if(isMatchHistoryDataGenerated && summonerMatchHistoryDetailData && summonerMatchHistoryDetailData.length === summonerMatchHistoryDetailList.current.length && summonerMatchHistoryDetailData.length === 7){
-            console.log('Individual match data already exists: \n' + JSON.stringify(summonerMatchHistoryDetailData));
+            //console.log('Individual match data already exists: \n' + JSON.stringify(summonerMatchHistoryDetailData));
             isMatchHistoryDataLoaded.current = false;
             setIsDataFullyGenerated(true);
             return;
@@ -518,10 +518,10 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
                                     <div id='summoner-mastery-container'>
                                         <p>Top 7 champions</p>
                                         {summonerMasteryApiData && !errorData ? summonerMasteryApiData.map(championMasteryInfo => (
-                                            <ul key={championData[championMasteryInfo['championId']][0]}>
-                                                <img src={championData[championMasteryInfo['championId']][1]} alt='ICANT KEKW'/>
-                                                <p>{championData[championMasteryInfo['championId']][0]} - Mastery {championMasteryInfo['championLevel']} with {championMasteryInfo['championPoints']} points.</p>
-                                            </ul>
+                                            <>
+                                            <img src={championData[championMasteryInfo['championId']][1]} alt='ICANT KEKW'/>
+                                            <p>{championData[championMasteryInfo['championId']][0]} - Mastery {championMasteryInfo['championLevel']} with {championMasteryInfo['championPoints']} points.</p>
+                                            </>
                                         )) : (!errorData ? 
                                                 <p>Rendering</p>
                                                 : <p>DATA HAS ERROR xdd</p>

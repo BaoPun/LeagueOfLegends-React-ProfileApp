@@ -116,7 +116,7 @@ export default function MatchHistoryDisplay({summonerMatchHistoryDetailData, pla
                     : 
                         summonerMatchHistoryDetailData.map((match, idx) => (
                             <div className='match-history-detail'>
-                                <ul key={match['gameId']} className="match-detail" style={ChangeBackgroundColor(match['participants'], summonerApiData['id'], match['gameDuration'])} onClick={() => ExpandOrCollapseMatchDetail(idx)}>
+                                <div key={match['gameId']} className="match-detail" style={ChangeBackgroundColor(match['participants'], summonerApiData['id'], match['gameDuration'])} onClick={() => ExpandOrCollapseMatchDetail(idx)}>
                                     <img src={GetChampionImgOfPlayerFromMatch(match['participants'], summonerApiData['id'], championData)} alt='plink'/>
                                     <p>Game Start Date: {new Date(match['gameCreation']).toLocaleString()}</p>
                                     <p>Game Duration: {Math.floor(match['gameDuration'] / 60)} minutes, {match['gameDuration'] % 60} seconds</p>
@@ -126,19 +126,19 @@ export default function MatchHistoryDisplay({summonerMatchHistoryDetailData, pla
                                             match['participants'].map( participant => (
                                                 <>
                                                     <div className='match-expanded-user-detail' style={{backgroundColor: (participant['win'] ? '#006db0' : '#9d2933')}}>
+                                                            <img src={championData[participant['championId']][1]} alt="kekw"/><br/><br/>
+                                                            <div className='participant-summoner-spells'>
+                                                                <img src={summonerSpellData[participant['summoner1Id']][2]} alt='na'/>
+                                                                <img src={summonerSpellData[participant['summoner2Id']][2]} alt='eu'/>
+                                                            </div>
                                                         <p>
-                                                            <a href={GetNewUri(platform, participant['summonerName'])}>{participant['summonerName']}</a>
-                                                            {' => '} 
-                                                            <img src={championData[participant['championId']][1]} alt="kekw"/>
+                                                            <a href={GetNewUri(platform, participant['summonerName'])}>{participant['summonerName']}</a><br/>
                                                             {GetRolePosition(participant['teamPosition'])}<br/>
                                                             {participant['kills']} kills / {participant['deaths']} deaths / {participant['assists']} assists {' => '} ({ComputeKDA(participant['kills'], participant['deaths'], participant['assists'])}) KDA.<br/>
                                                             Total damage: {participant['totalDamageDealtToChampions']}<br/>
                                                             Total CS: {participant['totalMinionsKilled'] + participant['neutralMinionsKilled']} ({Math.round((participant['totalMinionsKilled'] + participant['neutralMinionsKilled']) / (Math.floor(match['gameDuration'] / 60)) * 100) / 100} CS/minute)<br/>
                                                         </p>
-                                                        <div className='participant-summoner-spells'>
-                                                            <img src={summonerSpellData[participant['summoner1Id']][2]} alt='na'/>
-                                                            <img src={summonerSpellData[participant['summoner2Id']][2]} alt='eu'/>
-                                                        </div>
+                                                        
                                                         <div className='participant-items'>
                                                             <GetItem itemId={participant['item0']} version={version} />
                                                             <GetItem itemId={participant['item1']} version={version} />
@@ -154,7 +154,7 @@ export default function MatchHistoryDisplay({summonerMatchHistoryDetailData, pla
                                             ))
                                         }
                                     </div>
-                                </ul>
+                                </div>
                             </div>
                         ))
             }

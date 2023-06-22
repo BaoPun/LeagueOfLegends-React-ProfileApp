@@ -77,7 +77,7 @@ function GetRolePosition(role){
  * @param {object} summonerMatchHistoryDetailData 
  * @returns 
  */
-export default function MatchHistoryDisplay({summonerMatchHistoryDetailData, platform, summonerApiData, errorData, championData, queueData, itemData, version}){
+export default function MatchHistoryDisplay({summonerMatchHistoryDetailData, platform, summonerApiData, errorData, championData, summonerSpellData, queueData, itemData, version}){
     // 7 false states initially
     let isExpandedMatchDetailView = useRef([false, false, false, false, false, false, false]);
 
@@ -135,6 +135,10 @@ export default function MatchHistoryDisplay({summonerMatchHistoryDetailData, pla
                                                             Total damage: {participant['totalDamageDealtToChampions']}<br/>
                                                             Total CS: {participant['totalMinionsKilled'] + participant['neutralMinionsKilled']} ({Math.round((participant['totalMinionsKilled'] + participant['neutralMinionsKilled']) / (Math.floor(match['gameDuration'] / 60)) * 100) / 100} CS/minute)<br/>
                                                         </p>
+                                                        <div className='participant-summoner-spells'>
+                                                            <img src={summonerSpellData[participant['summoner1Id']][2]} alt='na'/>
+                                                            <img src={summonerSpellData[participant['summoner2Id']][2]} alt='eu'/>
+                                                        </div>
                                                         <div className='participant-items'>
                                                             <GetItem itemId={participant['item0']} version={version} />
                                                             <GetItem itemId={participant['item1']} version={version} />

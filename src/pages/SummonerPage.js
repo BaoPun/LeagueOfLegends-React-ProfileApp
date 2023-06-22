@@ -532,9 +532,7 @@ export default function SummonerPage({ championData, summonerSpellData, queueDat
                             </div>
                             <div className='summoner-profile-info' style={{display: 'none'}}>
                                 <p>Match History</p>
-                                <>
-                                    <MatchHistoryDisplay summonerMatchHistoryDetailData={summonerMatchHistoryDetailData} platform={currentPlatform} summonerApiData={summonerApiData} errorData={errorData} championData={championData} queueData={queueData} itemData={itemData} version={version} />
-                                </>
+                                <MatchHistoryDisplay summonerMatchHistoryDetailData={summonerMatchHistoryDetailData} platform={currentPlatform} summonerApiData={summonerApiData} errorData={errorData} championData={championData} summonerSpellData={summonerSpellData} queueData={queueData} itemData={itemData} version={version} />
                             </div>
                             <div className='summoner-profile-info' style={{display: 'none'}}>
                                 <p>Live Game Data</p>
